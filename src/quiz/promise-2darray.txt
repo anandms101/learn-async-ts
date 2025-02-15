@@ -1,4 +1,15 @@
-- Extract the code in the setTimeout function and replace the setTimeout function  with the extracted code. Then run the main script. 
+- Extract the code in the setTimeout function and replace the setTimeout function with the extracted code. Then run the main script. 
 - Is there a difference in the flow of execution from when the code was in the setTimeout function?
 - Is the flow of execution in both these examples different from the flow of execution with the examples using the fetch() API, which also returns a promise? 
 - If yes, explain the code execution difference. Add your explanation to this file.
+
+1. When the summing logic was inside setTimeout, the code waited until the next tick of the event loop to start the calculation. This means the promise was created immediately, but the actual work (the summing) happened a little later, giving other code a chance to run first.
+
+2. By extracting the summing logic and removing the setTimeout, the calculation now happens immediately when the promise is constructed. There is no delay at all, so the execution is more straightforward and closer to synchronous behavior within that promise.
+
+3. In contrast, the fetch() API always returns a promise that resolves asynchronously using microtasks. Even if the operation is fast, it always defers the resolution until the current call stack is cleared. This guarantees a non-blocking behavior.
+
+To sum up:
+- The setTimeout version introduces a deliberate asynchronous delay, allowing the event loop to run other tasks first.
+- The inline version computes the sum immediately within the promise, reducing the asynchronous feel.
+- The fetch() API, however, always forces an asynchronous flow by design, ensuring that its promise resolution happens after all synchronous code has finished executing.
