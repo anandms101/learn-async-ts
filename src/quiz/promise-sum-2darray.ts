@@ -10,12 +10,16 @@ function computeRowSum(row: number[]): Promise<number> {
   });
 }
 
-function computeSum2DArrayConcurrent(arr: number[][]): Promise<number> {
-  return Promise.all(arr.map((row) => computeRowSum(row))).then((rowSums) =>
-    rowSums.reduce((acc, cur) => acc + cur, 0)
-  );
+async function computeSum2DArrayConcurrent(arr: number[][]): Promise<number> {
+  const rowSums = await Promise.all(arr.map((row) => computeRowSum(row)));
+  return rowSums.reduce((acc, cur) => acc + cur, 0);
 }
 
-computeSum2DArrayConcurrent(array2D_1)
-  .then((total) => console.log("Total sum (concurrent):", total))
-  .catch((err) => console.error(err));
+(async () => {
+  try {
+    const total = await computeSum2DArrayConcurrent(array2D_1);
+    console.log("Total sum (concurrent):", total);
+  } catch (err) {
+    console.error(err);
+  }
+})();
